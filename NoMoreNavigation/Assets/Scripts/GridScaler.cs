@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +13,12 @@ public class GridScaler : MonoBehaviour
 
     private void Start()
     {
-        ScaleGrid();
+        ScaleGrid(width,height);
     }
 
-    public void ScaleGrid()
+    public void ScaleGrid(int width, int height)
     {
+        DeleteWaypoints();
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -25,7 +27,14 @@ public class GridScaler : MonoBehaviour
             }
         }
 
-        Camera.main.transform.position += new Vector3(width/2, height, 1) * 10;
+        Camera.main.transform.position = new Vector3(width/2.2f, height, 1) * 10;
     }
 
+    private void DeleteWaypoints()
+    {
+        foreach(Transform waypoint in map)
+        {
+            Destroy(waypoint.gameObject);
+        }
+    }
 }

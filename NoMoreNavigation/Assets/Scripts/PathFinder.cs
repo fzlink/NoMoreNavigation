@@ -3,17 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PathFindAlgorithm
+{
+    BestFirstSearch = 0,
+    Astar = 1,
+    BreadthFirstSearch = 2,
+    DepthFirstSearch =3
+}
+
+public enum Heuristic
+{
+    ManhattanDistance = 0,
+    EuclidianDistance = 1
+}
 public class PathFinder : MonoBehaviour
 {
-    public enum PathFindAlgorithm
-    {
-        BestFirstSearch = 0,
-        Astar = 1,
-        BreadthFirstSearch = 2,
-        DepthFirstSearch =3
-    }
     public PathFindAlgorithm pathFindAlgorithm;
-
+    public Heuristic heuristic;
 
     Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>();
     Vector2Int[] directions = { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
@@ -22,11 +28,15 @@ public class PathFinder : MonoBehaviour
     [SerializeField] Waypoint finishWaypoint;
 
 
-
-    public List<Waypoint> GetPath()
+    public List<Waypoint> GetPath(Waypoint startWaypoint, Waypoint finishWaypoint, int pathFindAlgorithm, int heuristic)
     {
+        this.startWaypoint = startWaypoint;
+        this.finishWaypoint = finishWaypoint;
+        this.pathFindAlgorithm = (PathFindAlgorithm)pathFindAlgorithm;
+        this.heuristic = (Heuristic)heuristic;
         LoadGrid();
-        ColorStartAndEnd();
+        //ColorStartAndEnd();
+
         return PathFind();
     }
 
@@ -37,6 +47,9 @@ public class PathFinder : MonoBehaviour
         foreach (Waypoint waypoint in waypoints)
         {
             Vector2Int gridPos = waypoint.GetGridPos();
+            waypoint.isExplored = false;
+            waypoint.UnPaint();
+
             if (grid.ContainsKey(gridPos))
             {
                 print("Skipping Overlapped Block: " + waypoint);
@@ -203,7 +216,10 @@ public class PathFinder : MonoBehaviour
 
     private void Evaluate(Waypoint waypoint)
     {
-        waypoint.h = AbsSum(finishWaypoint.GetGridPos() - waypoint.GetGridPos());
+        if (heuristic == Heuristic.ManhattanDistance)
+            waypoint.h = AbsSum(finishWaypoint.GetGridPos() - waypoint.GetGridPos());
+        else if (heuristic == Heuristic.EuclidianDistance)
+            waypoint.h = Vector2Int.Distance(finishWaypoint.GetGridPos(), waypoint.GetGridPos());
     }
 
     private void GiveWeight(Waypoint waypoint)

@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e51a1b4beb5d545bcccafacbd10aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextStep: 0
 --- !u!65 &356922141
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -124,6 +125,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 33557114771315490, guid: 0dc657ece5d6f514297eb54082bc243b,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 042c32b34794f584aa882ba5397f2c19, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0dc657ece5d6f514297eb54082bc243b, type: 3}
 --- !u!1 &7231962247110629247 stripped
